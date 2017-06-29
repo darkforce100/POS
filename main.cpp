@@ -154,6 +154,7 @@ void generateLoggedAdminPanel(){
                     char taxOpt = ' ';
                     double tax, base;
                     cout << "What is the title of the book?\n";
+                    cin.ignore();
                     getline(cin, title);
                     cin.ignore(256, '\n');
                     cout << "Who is the author of the book?\n";
@@ -224,8 +225,9 @@ void generateLoggedAdminPanel(){
                     string title;
                     double base;
                     td_s expiration;
-                    int month, day, year;
+                    int month = 0, day = 0, year = 0;
                     cout << "What is the name of the item?\n";
+                    cin.ignore();
                     getline(cin, title);
                     cin.ignore(256, '\n');
                     cout << "What is the base price of this item?\n";
@@ -270,7 +272,9 @@ void generateLoggedAdminPanel(){
                     double base, tax;
                     char isTaxable = ' ', taxOpt = ' ';
                     cout << "What is the name of the item?";
-                    cin >> title;
+                    cin.ignore();
+                    getline(cin, title);
+                    cin.ignore(256, '\n');
                     cout << "What is the base price of this item?";
                     cin >> base;
                     cout << "Is this item taxable? [Y\\N]\n";
@@ -299,6 +303,7 @@ void generateLoggedAdminPanel(){
                         i.setName(title);
                         i.setBasePrice(base);
                         i.setTaxRate(tax);
+                        cout << title << "!";
                         itemCatalog_taxable.push_back(i);
                     } else {
                         Item i;
@@ -501,12 +506,12 @@ void decodeToItem(string s){
         unsigned long firstSentinel = s.find_first_of("|");
         s = s.substr(firstSentinel + 1, s.length() - 1);
         firstSentinel = s.find_first_of("|");
-        i.setName(s.substr(0, firstSentinel - 1));
+        i.setName(s.substr(0, firstSentinel));
         s = s.substr(firstSentinel + 1, s.length() - 1);
         firstSentinel = s.find_first_of("|");
-        i.setBasePrice(stod(s.substr(0, firstSentinel - 1)));
+        i.setBasePrice(stod(s.substr(0, firstSentinel)));
         s = s.substr(firstSentinel + 1, s.length() - 1);
-        i.setTaxRate(100 * stod(s.substr(0, s.length() -1)));
+        i.setTaxRate(100 * stod(s.substr(0, s.length() - 1)));
         itemCatalog_taxable.push_back(i);
     } else if (s.find("UNTAXABLE") == 0){
         Item i;
@@ -514,7 +519,7 @@ void decodeToItem(string s){
         unsigned long firstSentinel = s.find_first_of("|");
         s = s.substr(firstSentinel + 1, s.length() - 1);
         firstSentinel = s.find_first_of("|");
-        i.setName(s.substr(0, firstSentinel - 1));
+        i.setName(s.substr(0, firstSentinel));
         s = s.substr(firstSentinel + 1, s.length() - 1);
         i.setBasePrice(stod(s.substr(0, s.length() - 1)));
         itemCatalog_untaxable.push_back(i);
@@ -524,19 +529,19 @@ void decodeToItem(string s){
         unsigned long firstSentinel = s.find_first_of("|");
         s = s.substr(firstSentinel + 1, s.length() - 1);
         firstSentinel = s.find_first_of("|");
-        i.setName(s.substr(0, firstSentinel - 1));
+        i.setName(s.substr(0, firstSentinel));
         s = s.substr(firstSentinel + 1, s.length() - 1);
         firstSentinel = s.find_first_of("|");
-        i.setBasePrice(stod(s.substr(0, firstSentinel - 1)));
+        i.setBasePrice(stod(s.substr(0, firstSentinel)));
         s = s.substr(firstSentinel + 1, s.length() - 1);
         firstSentinel = s.find_first_of("|");
-        i.setTaxRate(stod(s.substr(0, firstSentinel - 1)));
+        i.setTaxRate(stod(s.substr(0, firstSentinel)));
         s = s.substr(firstSentinel + 1, s.length() - 1);
         firstSentinel = s.find_first_of("|");
-        i.setAuthor(s.substr(0,firstSentinel - 1));
+        i.setAuthor(s.substr(0,firstSentinel));
         s = s.substr(firstSentinel + 1, s.length() - 1);
         firstSentinel = s.find_first_of("|");
-        i.setBar(s.substr(0, firstSentinel - 1));
+        i.setBar(s.substr(0, firstSentinel));
         s = s.substr(firstSentinel + 1, s.length() - 1);
         i.setIsbn(s.substr(0, s.length() - 1));
         itemCatalog_book.push_back(i);
@@ -548,18 +553,18 @@ void decodeToItem(string s){
         unsigned long firstSentinel = s.find_first_of("|");
         s = s.substr(firstSentinel + 1, s.length() - 1);
         firstSentinel = s.find_first_of("|");
-        i.setName(s.substr(0, firstSentinel - 1));
+        i.setName(s.substr(0, firstSentinel));
         s = s.substr(firstSentinel + 1, s.length() -1);
         firstSentinel = s.find_first_of("|");
-        i.setBasePrice(stod(s.substr(0, firstSentinel - 1)));
+        i.setBasePrice(stod(s.substr(0, firstSentinel)));
         s = s.substr(firstSentinel + 1, s.length() - 1);
         ed = s.substr(0, s.length() - 1);
 
         firstSentinel = ed.find_first_of(".");
-        day = stoi(ed.substr(0, firstSentinel - 1));
+        day = stoi(ed.substr(0, firstSentinel));
         ed = ed.substr(firstSentinel + 1, ed.length() - 1);
         firstSentinel = ed.find_first_of(".");
-        month = stoi(ed.substr(0, firstSentinel - 1));
+        month = stoi(ed.substr(0, firstSentinel));
         ed = ed.substr(firstSentinel + 1, ed.length() - 1);
         year = stoi(ed.substr(0, ed.length() - 1));
         td_s exp;
