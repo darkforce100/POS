@@ -221,11 +221,48 @@ void generateLoggedAdminPanel(){
                     break;
                 }
                 case 2: {
-                    //TODO Requests item info, generates appropriate object, and adds to catalog vector.
                     string title;
                     double base;
                     td_s expiration;
                     int month, day, year;
+                    cout << "What is the name of the item?\n";
+                    getline(cin, title);
+                    cin.ignore(256, '\n');
+                    cout << "What is the base price of this item?\n";
+                    cin >> base;
+                    cout << "What is the expiration date?  (Enter month, day, then year in digits)\n";
+                    while(month <= 0 || month > 12)
+                    {
+                        cin >> month;
+                        if(month <= 0 || month > 12)
+                        {
+                            cout << "Invalid month, enter again";
+                        }
+                    }
+                    while(day <= 0 || day > 31)
+                    {
+                        cin >> day;
+                        if(day <= 0 || day > 31)
+                        {
+                            cout << "Invalid day, enter again";
+                        }
+                    }
+                    while(year < 1000 || year > 9999)
+                    {
+                        cin >> year;
+                        if(year < 1000 || year > 9999)
+                        {
+                            cout << "Invalid year, enter again";
+                        }
+                    }
+                    expiration.month = month;
+                    expiration.day = day;
+                    expiration.year = year;
+                    GroceryItem g;
+                    g.setName(title);
+                    g.setBasePrice(base);
+                    g.setExpiration(expiration);
+                    itemCatalog_grocery.push_back(g);
                     break;
                 }
                 case 3: {
@@ -275,6 +312,7 @@ void generateLoggedAdminPanel(){
                     break;
             }
             writeCatalog();
+            generateLoggedAdminPanel();
             break;
         }
         case 2: {
@@ -457,7 +495,6 @@ void writeCatalog(){
 };
 
 void decodeToItem(string s){
-    //TODO Generate appropriate Item for string and add to cat
     if (s.find("TAXABLE") == 0){
         TaxableItem i;
         //Parse string as taxable item
@@ -474,12 +511,63 @@ void decodeToItem(string s){
     } else if (s.find("UNTAXABLE") == 0){
         Item i;
         //Parse string as generic untaxable item
+        unsigned long firstSentinel = s.find_first_of("|");
+        s = s.substr(firstSentinel + 1, s.length() - 1);
+        firstSentinel = s.find_first_of("|");
+        i.setName(s.substr(0, firstSentinel - 1));
+        s = s.substr(firstSentinel + 1, s.length() - 1);
+        i.setBasePrice(stod(s.substr(0, s.length() - 1)));
+        itemCatalog_untaxable.push_back(i);
     } else if (s.find("BOOK") == 0){
         BookItem i;
         //Parse string as book item
+        unsigned long firstSentinel = s.find_first_of("|");
+        s = s.substr(firstSentinel + 1, s.length() - 1);
+        firstSentinel = s.find_first_of("|");
+        i.setName(s.substr(0, firstSentinel - 1));
+        s = s.substr(firstSentinel + 1, s.length() - 1);
+        firstSentinel = s.find_first_of("|");
+        i.setBasePrice(stod(s.substr(0, firstSentinel - 1)));
+        s = s.substr(firstSentinel + 1, s.length() - 1);
+        firstSentinel = s.find_first_of("|");
+        i.setTaxRate(stod(s.substr(0, firstSentinel - 1)));
+        s = s.substr(firstSentinel + 1, s.length() - 1);
+        firstSentinel = s.find_first_of("|");
+        i.setAuthor(s.substr(0,firstSentinel - 1));
+        s = s.substr(firstSentinel + 1, s.length() - 1);
+        firstSentinel = s.find_first_of("|");
+        i.setBar(s.substr(0, firstSentinel - 1));
+        s = s.substr(firstSentinel + 1, s.length() - 1);
+        i.setIsbn(s.substr(0, s.length() - 1));
+        itemCatalog_book.push_back(i);
     } else if (s.find("GROCERY") == 0){
         GroceryItem i;
+        string ed;
+        int day, month, year;
         //Parse string as grocery item
+        unsigned long firstSentinel = s.find_first_of("|");
+        s = s.substr(firstSentinel + 1, s.length() - 1);
+        firstSentinel = s.find_first_of("|");
+        i.setName(s.substr(0, firstSentinel - 1));
+        s = s.substr(firstSentinel + 1, s.length() -1);
+        firstSentinel = s.find_first_of("|");
+        i.setBasePrice(stod(s.substr(0, firstSentinel - 1)));
+        s = s.substr(firstSentinel + 1, s.length() - 1);
+        ed = s.substr(0, s.length() - 1);
+
+        firstSentinel = ed.find_first_of(".");
+        day = stoi(ed.substr(0, firstSentinel - 1));
+        ed = ed.substr(firstSentinel + 1, ed.length() - 1);
+        firstSentinel = ed.find_first_of(".");
+        month = stoi(ed.substr(0, firstSentinel - 1));
+        ed = ed.substr(firstSentinel + 1, ed.length() - 1);
+        year = stoi(ed.substr(0, ed.length() - 1));
+        td_s exp;
+        exp.day = day;
+        exp.month = month;
+        exp.year = year;
+        i.setExpiration(exp);
+        itemCatalog_grocery.push_back(i);
     } else {
         //This should never ever happen :(
         cerr << "FATAL ERROR - Mkpt 1" << s;
