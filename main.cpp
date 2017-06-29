@@ -18,6 +18,7 @@ string encodeToString(TaxableItem);
 string encodeToString(GroceryItem);
 string encodeToString(BookItem);
 int main();
+
 vector <Item> itemCatalog_untaxable;
 vector <TaxableItem> itemCatalog_taxable;
 vector <GroceryItem> itemCatalog_grocery;
@@ -60,23 +61,23 @@ int main() {
              << "Enter a term to search by below:\n";
         string searchTerm;
         cin >> searchTerm;
-        for (Item i : itemCatalog_untaxable) {
-            if (i.getName().find(searchTerm) != string::npos) {
+        for (Item j : itemCatalog_untaxable) {
+            if (j.getName().find(searchTerm) != string::npos) {
                 //TODO add i to menu
             }
         }
-        for (TaxableItem i : itemCatalog_taxable) {
-            if (i.getName().find(searchTerm) != string::npos) {
+        for (TaxableItem j : itemCatalog_taxable) {
+            if (j.getName().find(searchTerm) != string::npos) {
                 //TODO add i to menu
             }
         }
-        for (BookItem i : itemCatalog_book) {
-            if (i.getName().find(searchTerm) != string::npos) {
+        for (BookItem j : itemCatalog_book) {
+            if (j.getName().find(searchTerm) != string::npos) {
                 //TODO add i to menu
             }
         }
-        for (GroceryItem i : itemCatalog_grocery) {
-            if (i.getName().find(searchTerm) != string::npos) {
+        for (GroceryItem j : itemCatalog_grocery) {
+            if (j.getName().find(searchTerm) != string::npos) {
                 //TODO add i to menu
             }
         }
@@ -230,15 +231,16 @@ void generateLoggedAdminPanel(){
                 case 3: {
                     string title;
                     double base, tax;
-                    char isTaxable, taxOpt;
+                    char isTaxable = ' ', taxOpt;
+                    taxOpt = ' ';
                     cout << "What is the name of the item?";
                     cin >> title;
                     cout << "What is the base price of this item?";
                     cin >> base;
                     cout << "Is this item taxable? [Y\\N]\n";
-                    while (tolower((int) taxOpt) != 'y' && tolower((int) taxOpt) != 'n') {
-                        cin >> taxOpt;
-                        if (tolower((int) taxOpt) != 'y' && tolower((int) taxOpt) != 'n') {
+                    while (tolower((int) isTaxable) != 'y' && tolower((int) isTaxable) != 'n') {
+                        cin >> isTaxable;
+                        if (tolower((int) isTaxable) != 'y' && tolower((int) isTaxable) != 'n') {
                             cout << "Invalid response. Please enter a Y or N.\n";
                         }
                     }
@@ -367,7 +369,7 @@ void generateLoggedAdminPanel(){
             int c = 1, select;
             switch(type) {
                 case 1: {
-                    for (const BookItem i : itemCatalog_book) {
+                    for (const BookItem &i : itemCatalog_book) {
                         cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
                         c++;
                     }
@@ -376,7 +378,7 @@ void generateLoggedAdminPanel(){
                     break;
                 }
                 case 2: {
-                    for (const GroceryItem i : itemCatalog_grocery) {
+                    for (const GroceryItem &i : itemCatalog_grocery) {
                         cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
                         c++;
                     }
@@ -385,7 +387,7 @@ void generateLoggedAdminPanel(){
                     break;
                 }
                 case 3: {
-                    for (const Item i : itemCatalog_untaxable) {
+                    for (const Item &i : itemCatalog_untaxable) {
                         cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
                         c++;
                     }
@@ -394,7 +396,7 @@ void generateLoggedAdminPanel(){
                     break;
                 }
                 case 4: {
-                    for (const TaxableItem i : itemCatalog_taxable) {
+                    for (const TaxableItem &i : itemCatalog_taxable) {
                         cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
                         c++;
                     }
