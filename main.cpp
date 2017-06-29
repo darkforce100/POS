@@ -228,7 +228,6 @@ void generateLoggedAdminPanel(){
                     break;
                 }
                 case 3: {
-                    //TODO Requests item info, generates appropriate object, and adds to catalog vector.
                     string title;
                     double base, tax;
                     char isTaxable, taxOpt;
@@ -258,13 +257,16 @@ void generateLoggedAdminPanel(){
                             cout << "What is the special tax rate for this item (in percent)?\n";
                             cin >> tax;
                         }
-                        //TODO TaxableItem code
+                        TaxableItem i;
+                        i.setName(title);
+                        i.setBasePrice(base);
+                        i.setTaxRate(tax);
+                        itemCatalog_taxable.push_back(i);
                     } else {
-                        //TODO Item code
                         Item i;
                         i.setName(title);
                         i.setBasePrice(base);
-                        item
+                        itemCatalog_untaxable.push_back(i);
                     }
                     break;
                 }
