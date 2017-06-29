@@ -18,6 +18,7 @@ string encodeToString(TaxableItem);
 string encodeToString(GroceryItem);
 string encodeToString(BookItem);
 int main();
+
 vector <Item> itemCatalog_untaxable;
 vector <TaxableItem> itemCatalog_taxable;
 vector <GroceryItem> itemCatalog_grocery;
@@ -230,15 +231,15 @@ void generateLoggedAdminPanel(){
                 case 3: {
                     string title;
                     double base, tax;
-                    char isTaxable, taxOpt;
+                    char isTaxable = ' ', taxOpt = ' ';
                     cout << "What is the name of the item?";
                     cin >> title;
                     cout << "What is the base price of this item?";
                     cin >> base;
                     cout << "Is this item taxable? [Y\\N]\n";
-                    while (tolower((int) taxOpt) != 'y' && tolower((int) taxOpt) != 'n') {
-                        cin >> taxOpt;
-                        if (tolower((int) taxOpt) != 'y' && tolower((int) taxOpt) != 'n') {
+                    while (tolower((int) isTaxable) != 'y' && tolower((int) isTaxable) != 'n') {
+                        cin >> isTaxable;
+                        if (tolower((int) isTaxable) != 'y' && tolower((int) isTaxable) != 'n') {
                             cout << "Invalid response. Please enter a Y or N.\n";
                         }
                     }
