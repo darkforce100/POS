@@ -12,12 +12,13 @@ void generateLogInPanel();
 void generateLoggedAdminPanel();
 void writeCatalog();
 void readCatalog();
-Item decodeToItem(string);
+void decodeToItem(string);
 string encodeToString(Item);
 string encodeToString(TaxableItem);
 string encodeToString(GroceryItem);
 string encodeToString(BookItem);
 int main();
+
 vector <Item> itemCatalog_untaxable;
 vector <TaxableItem> itemCatalog_taxable;
 vector <GroceryItem> itemCatalog_grocery;
@@ -94,7 +95,7 @@ int main() {
         break;
     }
   }
-  
+
     return 0;
 }
 
@@ -117,7 +118,7 @@ void generateLogInPanel(){
 void generateLoggedAdminPanel(){
     int choice  = 0;
     cout << "Welcome, admin.\n\n";
-    //readCatalog();
+    readCatalog();
     while(choice < 1 || choice > 4){
         cout << setw(60) << setfill('*') << "" << "\n"
              << setfill(' ') << setw(59) << left << "*" << "*\n"
@@ -225,30 +226,24 @@ void generateLoggedAdminPanel(){
                     double base;
                     td_s expiration;
                     int month, day, year;
-                    cout << "What is the name of the item?\n";
-                    cin >> title;
-                    cout << "What is the base price of this item?\n";
-                    cin >> base;
-                    cout << "What is the expiration date?  Enter month, day, then year in digits)";
-                    cin >> month >> day >> year;
                     break;
                 }
                 case 3: {
                     string title;
                     double base, tax;
-                    char isTaxable, taxOpt;
-                    cout << "What is the name of the item?\n";
+                    char isTaxable = ' ', taxOpt = ' ';
+                    cout << "What is the name of the item?";
                     cin >> title;
-                    cout << "What is the base price of this item?\n";
+                    cout << "What is the base price of this item?";
                     cin >> base;
                     cout << "Is this item taxable? [Y\\N]\n";
-                    while (tolower((int) taxOpt) != 'y' && tolower((int) taxOpt) != 'n') {
-                        cin >> taxOpt;
-                        if (tolower((int) taxOpt) != 'y' && tolower((int) taxOpt) != 'n') {
+                    while (tolower((int) isTaxable) != 'y' && tolower((int) isTaxable) != 'n') {
+                        cin >> isTaxable;
+                        if (tolower((int) isTaxable) != 'y' && tolower((int) isTaxable) != 'n') {
                             cout << "Invalid response. Please enter a Y or N.\n";
                         }
                     }
-                    if (tolower((int) taxOpt) == 'y') {
+                    if (tolower((int) isTaxable) == 'y') {
                         cout << "Use the default tax rate? (8.25%) [Y\\N]\n";
                         while (tolower((int) taxOpt) != 'y' && tolower((int) taxOpt) != 'n') {
                             cin >> taxOpt;
@@ -438,7 +433,7 @@ void readCatalog(){
     itemCatalog_book = {};
     while (getline(catFile, s))
     {
-        //TODO add decoded strings to respective catalogs
+        decodeToItem(s);
     }
     catFile.close();
 }
@@ -461,30 +456,34 @@ void writeCatalog(){
     catFile.close();
 };
 
-Item decodeToItem(string s){
-    //TODO Generate appropriate Item for string
+void decodeToItem(string s){
+    //TODO Generate appropriate Item for string and add to cat
     if (s.find("TAXABLE") == 0){
         TaxableItem i;
         //Parse string as taxable item
-        return i;
+        unsigned long firstSentinel = s.find_first_of("|");
+        s = s.substr(firstSentinel + 1, s.length() - 1);
+        firstSentinel = s.find_first_of("|");
+        i.setName(s.substr(0, firstSentinel - 1));
+        s = s.substr(firstSentinel + 1, s.length() - 1);
+        firstSentinel = s.find_first_of("|");
+        i.setBasePrice(stod(s.substr(0, firstSentinel - 1)));
+        s = s.substr(firstSentinel + 1, s.length() - 1);
+        i.setTaxRate(100 * stod(s.substr(0, s.length() -1)));
+        itemCatalog_taxable.push_back(i);
     } else if (s.find("UNTAXABLE") == 0){
         Item i;
         //Parse string as generic untaxable item
-        return i;
     } else if (s.find("BOOK") == 0){
         BookItem i;
         //Parse string as book item
-        return i;
     } else if (s.find("GROCERY") == 0){
         GroceryItem i;
         //Parse string as grocery item
-        return i;
     } else {
         //This should never ever happen :(
-        cout << "FATAL ERROR - Mkpt 1";
+        cerr << "FATAL ERROR - Mkpt 1" << s;
     }
-    Item i;
-    return i;
 }
 string encodeToString(Item i){
     string s;
@@ -494,13 +493,11 @@ string encodeToString(Item i){
 }
 string encodeToString(TaxableItem i){
     string s;
-    //TODO Generate appropriate string for item
     s = "TAXABLE|" + i.getName() + "|" + to_string(i.getBasePrice()) + "|" + to_string(i.getTaxRate());
     return s;
 }
 string encodeToString(GroceryItem i){
     string s;
-    //TODO Generate appropriate string for item
     int day, month, year;
     string exp;
     day = i.getExpiration().day;
@@ -523,6 +520,5 @@ string encodeToString(GroceryItem i){
 string encodeToString(BookItem i){
     string s;
     s = "BOOK|" + i.getName() + "|" + to_string(i.getBasePrice()) + "|" + to_string(i.getTaxRate()) + "|" + i.getAuthor() + "|" + i.getBar() + "|" + i.getIsbn();
-    //TODO Generate appropriate string for item
     return s;
 }
