@@ -5,7 +5,7 @@
 #include "TaxableItem.h"
 
 void TaxableItem::setTaxRate(double r){
-    TaxableItem::taxRate = r/100;
+    TaxableItem::taxRate = r;
 }
 
 double TaxableItem::getTaxRate() const {

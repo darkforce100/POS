@@ -1,8 +1,9 @@
 /*
  * Trenton, Tommy, Tyler, Alvin
- *
- *
- *
+ * COSC 1337.5001
+ * 7/6/2017
+ * Point of Sale Program
+ * Final Project
  * */
 
 #include <iostream>
@@ -16,219 +17,255 @@
 using namespace std;
 
 void generateLogInPanel();
+
 void generateLoggedAdminPanel();
+
 void writeCatalog();
+
 void readCatalog();
+
 void decodeToItem(string);
+
 string encodeToString(Item);
+
 string encodeToString(TaxableItem);
+
 string encodeToString(GroceryItem);
+
 string encodeToString(BookItem);
-int main();
-vector <Item> itemCatalog_untaxable;
-vector <TaxableItem> itemCatalog_taxable;
-vector <GroceryItem> itemCatalog_grocery;
-vector <BookItem> itemCatalog_book;
-vector <Item> itemCart_untaxable;
-vector <TaxableItem> itemCart_taxable;
-vector <GroceryItem> itemCart_grocery;
-vector <BookItem> itemCart_book;
+
+vector<Item> itemCatalog_untaxable;
+vector<TaxableItem> itemCatalog_taxable;
+vector<GroceryItem> itemCatalog_grocery;
+vector<BookItem> itemCatalog_book;
+vector<Item> itemCart_untaxable;
+vector<TaxableItem> itemCart_taxable;
+vector<GroceryItem> itemCart_grocery;
+vector<BookItem> itemCart_book;
 
 int main() {
     readCatalog();
-  int choice = 0;
+    int choice = 0;
     bool continued = false;
-  while(choice < 1 || choice > 3){
-      if (!continued) {
-          cout << setw(60) << setfill('*') << "" << "\n"
-               << setfill(' ') << setw(59) << left << "*" << "*\n"
-               << setw(59) << "*    1) New Transaction" << "*\n"
-               << setw(59) << "*    2) Log In As Administrator" << "*\n"
-               << setw(59) << "*    3) Quit" << "*\n"
-               << setw(59) << "*" << "*\n"
-               << setw(60) << setfill('*') << "" << "\n";
-          cin >> choice;
-      } else {continued = false; choice = 1;}
-    if (choice < 1 || choice > 3){cout << "You have entered an invalid option. Please try again.\n";}
-      else {
-        switch(choice){
-            case 1: {
+    while (choice < 1 || choice > 3) {
+        if (!continued) {
+            cout << setw(60) << setfill('*') << "" << "\n"
+                 << setfill(' ') << setw(59) << left << "*" << "*\n"
+                 << setw(59) << "*    1) New Transaction" << "*\n"
+                 << setw(59) << "*    2) Log In As Administrator" << "*\n"
+                 << setw(59) << "*    3) Quit" << "*\n"
+                 << setw(59) << "*" << "*\n"
+                 << setw(60) << setfill('*') << "" << "\n";
+            cin >> choice;
+        } else {
+            continued = false;
+            choice = 1;
+        }
+        if (choice < 1 || choice > 3) { cout << "You have entered an invalid option. Please try again.\n"; }
+        else {
+            switch (choice) {
+                case 1: {
 
-                int type = 0;
-                while(type < 1 || type > 4){
+                    int type = 0;
+                    while (type < 1 || type > 4) {
+                        cout << setw(60) << setfill('*') << "" << "\n"
+                             << setfill(' ') << setw(59) << left << "*" << "*\n"
+                             << setw(59) << "*    What category is the selected item in?" << "*\n"
+                             << setw(59) << "*" << "*\n"
+                             << setw(59) << "*    1) Books" << "*\n"
+                             << setw(59) << "*    2) Grocery" << "*\n"
+                             << setw(59) << "*    3) Other (Untaxable)" << "*\n"
+                             << setw(59) << "*    4) Other (Taxable)" << "*\n"
+                             << setw(59) << "*" << "*\n"
+                             << setw(60) << setfill('*') << "" << "\n";
+                        cin >> type;
+                        if (type < 1 || type > 4) { cout << "You have entered an invalid option. Please try again.\n"; }
+                    }
                     cout << setw(60) << setfill('*') << "" << "\n"
                          << setfill(' ') << setw(59) << left << "*" << "*\n"
-                         << setw(59) << "*    What category is the selected item in?" << "*\n"
-                         << setw(59) << "*" << "*\n"
-                         << setw(59) << "*    1) Books" << "*\n"
-                         << setw(59) << "*    2) Grocery" << "*\n"
-                         << setw(59) << "*    3) Other (Untaxable)" << "*\n"
-                         << setw(59) << "*    4) Other (Taxable)" << "*\n"
-                         << setw(59) << "*" << "*\n"
-                         << setw(60) << setfill('*') << "" << "\n";
-                    cin >> type;
-                    if (type < 1 || type > 4){cout << "You have entered an invalid option. Please try again.\n";}
-                }
-                cout << setw(60) << setfill('*') << "" << "\n"
-                     << setfill(' ') << setw(59) << left << "*" << "*\n"
-                     << setfill(' ') << setw(59) << left << "*    Which item do you wish to add to the cart? " << "*\n"
-                     << setfill(' ') << setw(59) << left << "*" << "*\n";
-                int select, c = 1;
-                switch(type) {
-                    case 1:{
-                        for (const BookItem i : itemCatalog_book) {
-                            cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
-                            c++;
+                         << setfill(' ') << setw(59) << left << "*    Which item do you wish to add to the cart? "
+                         << "*\n"
+                         << setfill(' ') << setw(59) << left << "*" << "*\n";
+                    int select, c = 1;
+                    switch (type) {
+                        case 1: {
+                            for (BookItem i : itemCatalog_book) {
+                                cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName()
+                                     << "*\n";
+                                c++;
+                            }
+                            cout << setfill(' ') << setw(59) << left << "*" << "*\n"
+                                 << setw(60) << setfill('*') << "" << "\n";
+                            cin >> select;
+                            itemCart_book.push_back((BookItem &&) itemCatalog_book.at((unsigned long) (select - 1)));
+                            cout << "Added to cart.\n";
+                            break;
                         }
-                        cout << setfill(' ') << setw(59) << left << "*" << "*\n"
-                             << setw(60) << setfill('*') << "" << "\n";
-                        cin >> select;
-                        itemCart_book.push_back((BookItem &&) itemCatalog_book.at((unsigned long) (select - 1)));
-                        cout << "Added to cart.\n";
-                        break;
-                    }
-                    case 2:{
-                        for (const GroceryItem i : itemCatalog_grocery) {
-                            cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
-                            c++;
+                        case 2: {
+                            for (GroceryItem i : itemCatalog_grocery) {
+                                cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName()
+                                     << "*\n";
+                                c++;
+                            }
+                            cout << setfill(' ') << setw(59) << left << "*" << "*\n"
+                                 << setw(60) << setfill('*') << "" << "\n";
+                            cin >> select;
+                            itemCart_grocery.push_back(
+                                    (GroceryItem &&) itemCatalog_grocery.at((unsigned long) (select - 1)));
+                            cout << "Added to cart.\n";
+                            break;
                         }
-                        cout << setfill(' ') << setw(59) << left << "*" << "*\n"
-                             << setw(60) << setfill('*') << "" << "\n";
-                        cin >> select;
-                        itemCart_grocery.push_back((GroceryItem &&) itemCatalog_grocery.at((unsigned long) (select - 1)));
-                        cout << "Added to cart.\n";
-                        break;
-                    }
-                    case 3:{
-                        for (const Item i : itemCatalog_untaxable) {
-                            cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
-                            c++;
+                        case 3: {
+                            for (Item i : itemCatalog_untaxable) {
+                                cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName()
+                                     << "*\n";
+                                c++;
+                            }
+                            cout << setfill(' ') << setw(59) << left << "*" << "*\n"
+                                 << setw(60) << setfill('*') << "" << "\n";
+                            cin >> select;
+                            itemCart_untaxable.push_back(
+                                    (Item &&) itemCatalog_untaxable.at((unsigned long) (select - 1)));
+                            cout << "Added to cart.\n";
+                            break;
                         }
-                        cout << setfill(' ') << setw(59) << left << "*" << "*\n"
-                             << setw(60) << setfill('*') << "" << "\n";
-                        cin >> select;
-                        itemCart_untaxable.push_back((Item &&) itemCatalog_untaxable.at((unsigned long) (select - 1)));
-                        cout << "Added to cart.\n";
-                        break;
-                    }
-                    case 4:{
-                        for (const TaxableItem i : itemCatalog_taxable) {
-                            cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
-                            c++;
+                        case 4: {
+                            for (TaxableItem i : itemCatalog_taxable) {
+                                cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName()
+                                     << "*\n";
+                                c++;
+                            }
+                            cout << setfill(' ') << setw(59) << left << "*" << "*\n"
+                                 << setw(60) << setfill('*') << "" << "\n";
+                            cin >> select;
+                            itemCart_taxable.push_back(
+                                    (TaxableItem &&) itemCatalog_taxable.at((unsigned long) (select - 1)));
+                            cout << "Added to cart.\n";
+                            break;
                         }
-                        cout << setfill(' ') << setw(59) << left << "*" << "*\n"
-                             << setw(60) << setfill('*') << "" << "\n";
-                        cin >> select;
-                        itemCart_taxable.push_back((TaxableItem &&) itemCatalog_taxable.at((unsigned long) (select - 1)));
-                        cout << "Added to cart.\n";
-                        break;
-                    }
-                    default:{
-                        cerr << "Category not available.\n";
-                        break;
-                    }
+                        default: {
+                            cerr << "Category not available.\n";
+                            break;
+                        }
 
-                }
-                int cont = 0;
-                while(cont < 1 || cont > 2){
-                    cout << setw(60) << setfill('*') << "" << "\n"
-                         << setfill(' ') << setw(59) << left << "*" << "*\n"
-                         << setw(59) << "*    Would you like to add another item?" << "*\n"
-                         << setw(59) << "*" << "*\n"
-                         << setw(59) << "*    1) Add Item" << "*\n"
-                         << setw(59) << "*    2) Finalize and Print Reciept" << "*\n"
-                         << setw(59) << "*" << "*\n"
-                         << setw(60) << setfill('*') << "" << "\n";
-                    cin.ignore(50, '\n');
-                    cin >> cont;
-                    if (cont < 1 || cont > 2){cout << "You have entered an invalid option. Please try again.\n";}
-                }
-                switch(cont){
-                    case 1: {
-                        continued = true;
-                        choice = 0;
-                        break;
                     }
-                    case 2: {
-                        double total = 0;
-                        cout << setw(5) << left << setfill(' ') << "" << "Title" << setw(5) << "" << "*" << setw(5) << "" << "Total" << setw(5) << "" << "*" << setw(6) << "" << "Tax" << setw(6) << "" << "\n";
-                        cout << setw(15) << left << "" << "*" << setw(15) << "" << "*" << setw(15) << "" << "\n";
-                        for (Item i : itemCart_untaxable){
-                            cout << setw(15) << left << i.getName() << "*" << setw(5) << "Sub $" << setw(10) << setprecision(2) << fixed << right << i.getBasePrice() << "*" << setw(5) << left << "Rate" << setw(9) << right << "0.00" << "%\n";
-                            cout << setw(15) << left << "" << "*" << setw(5) << "  + $" << right << setprecision(2) << fixed << setw(10) << 0 << "*" << left << setw(5) << "  = $" << setw(10) << right << i.getBasePrice() << "\n";
-                            total += i.getBasePrice();
-                        }
-                        for (TaxableItem i : itemCart_taxable){
-                            cout << setw(15) << left << i.getName() << "*" << setw(5) << "Sub $" << setw(10) << setprecision(2) << fixed << right << i.getBasePrice() << "*" << setw(5) << left << "Rate" << setw(9) << right << i.getTaxRate() << "%\n";
-                            cout << setw(15) << left << "" << "*" << setw(5) << "  + $" << right << setprecision(2) << fixed << setw(10) << i.getTaxAmount() << "*" << left << setw(5) << "  = $" << setw(10) << right << i.getTaxedPrice() << "\n";
-                            total += i.getTaxedPrice();
-                        }
-                        for (GroceryItem i : itemCart_grocery){
-                            cout << setw(15) << left << i.getName() << "*" << setw(5) << "Sub $" << setw(10) << setprecision(2) << fixed << right << i.getBasePrice() << "*" << setw(5) << left << "Rate" << setw(9) << right << "0.00" << "%\n";
-                            cout << setw(15) << left << "" << "*" << setw(5) << "  + $" << right << setprecision(2) << fixed << setw(10) << 0 << "*" << left << setw(5) << "  = $" << setw(10) << right << i.getBasePrice() << "\n";
-                            total += i.getBasePrice();
-                        }
-                        for (BookItem i : itemCart_book){
-                            cout << setw(15) << left << i.getName() << "*" << setw(5) << "Sub $" << setw(10) << setprecision(2) << fixed << right << i.getBasePrice() << "*" << setw(5) << left << "Rate" << setw(9) << right << i.getTaxRate() << "%\n";
-                            cout << setw(15) << left << "" << "*" << setw(5) << "  + $" << right << setprecision(2) << fixed << setw(10) << i.getTaxAmount() << "*" << left << setw(5) << "  = $" << setw(10) << right << i.getTaxedPrice() << "\n";
-                            total += i.getTaxedPrice();
-                        }
-                        cout << setw(15) << left << "" << "*" << setw(15) << "" << "*" << setw(15) << "" << "\n";
-                        cout << setw(15) << left << "" << "*" << setw(15) << "" << "*" << setw(15) << "" << "\n";
-                        cout << setw(15) << left << "TOTAL" << "*" << setw(5) << "    $" << right << setw(10) <<  setprecision(2) << fixed << total << "*" << setw(15) << "" << "\n";
-                        itemCart_untaxable = {};
-                        itemCart_taxable = {};
-                        itemCart_grocery = {};
-                        itemCart_book = {};
-                        main();
-                        break;
+                    int cont = 0;
+                    while (cont < 1 || cont > 2) {
+                        cout << setw(60) << setfill('*') << "" << "\n"
+                             << setfill(' ') << setw(59) << left << "*" << "*\n"
+                             << setw(59) << "*    Would you like to add another item?" << "*\n"
+                             << setw(59) << "*" << "*\n"
+                             << setw(59) << "*    1) Add Item" << "*\n"
+                             << setw(59) << "*    2) Finalize and Print Reciept" << "*\n"
+                             << setw(59) << "*" << "*\n"
+                             << setw(60) << setfill('*') << "" << "\n";
+                        cin.ignore(50, '\n');
+                        cin >> cont;
+                        if (cont < 1 || cont > 2) { cout << "You have entered an invalid option. Please try again.\n"; }
                     }
-                    default: {
-                        cerr << "This action is not available.\n";
-                        break;
+                    switch (cont) {
+                        case 1: {
+                            continued = true;
+                            choice = 0;
+                            break;
+                        }
+                        case 2: {
+                            double total = 0;
+                            cout << setw(5) << left << setfill(' ') << "" << "Title" << setw(5) << "" << "*" << setw(5)
+                                 << "" << "Total" << setw(5) << "" << "*" << setw(6) << "" << "Tax" << setw(6) << ""
+                                 << "\n";
+                            cout << setw(15) << left << "" << "*" << setw(15) << "" << "*" << setw(15) << "" << "\n";
+                            for (Item i : itemCart_untaxable) {
+                                cout << setw(15) << left << i.getName() << "*" << setw(5) << "Sub $" << setw(10)
+                                     << setprecision(2) << fixed << right << i.getBasePrice() << "*" << setw(5) << left
+                                     << "Rate" << setw(9) << right << "0.00" << "%\n";
+                                cout << setw(15) << left << "" << "*" << setw(5) << "  + $" << right << setprecision(2)
+                                     << fixed << setw(10) << 0 << "*" << left << setw(5) << "  = $" << setw(10) << right
+                                     << i.getBasePrice() << "\n";
+                                total += i.getBasePrice();
+                            }
+                            for (TaxableItem i : itemCart_taxable) {
+                                cout << setw(15) << left << i.getName() << "*" << setw(5) << "Sub $" << setw(10)
+                                     << setprecision(2) << fixed << right << i.getBasePrice() << "*" << setw(5) << left
+                                     << "Rate" << setw(9) << right << i.getTaxRate() << "%\n";
+                                cout << setw(15) << left << "" << "*" << setw(5) << "  + $" << right << setprecision(2)
+                                     << fixed << setw(10) << i.getTaxAmount() << "*" << left << setw(5) << "  = $"
+                                     << setw(10) << right << i.getTaxedPrice() << "\n";
+                                total += i.getTaxedPrice();
+                            }
+                            for (GroceryItem i : itemCart_grocery) {
+                                cout << setw(15) << left << i.getName() << "*" << setw(5) << "Sub $" << setw(10)
+                                     << setprecision(2) << fixed << right << i.getBasePrice() << "*" << setw(5) << left
+                                     << "Rate" << setw(9) << right << "0.00" << "%\n";
+                                cout << setw(15) << left << "" << "*" << setw(5) << "  + $" << right << setprecision(2)
+                                     << fixed << setw(10) << 0 << "*" << left << setw(5) << "  = $" << setw(10) << right
+                                     << i.getBasePrice() << "\n";
+                                total += i.getBasePrice();
+                            }
+                            for (BookItem i : itemCart_book) {
+                                cout << setw(15) << left << i.getName() << "*" << setw(5) << "Sub $" << setw(10)
+                                     << setprecision(2) << fixed << right << i.getBasePrice() << "*" << setw(5) << left
+                                     << "Rate" << setw(9) << right << i.getTaxRate() << "%\n";
+                                cout << setw(15) << left << "" << "*" << setw(5) << "  + $" << right << setprecision(2)
+                                     << fixed << setw(10) << i.getTaxAmount() << "*" << left << setw(5) << "  = $"
+                                     << setw(10) << right << i.getTaxedPrice() << "\n";
+                                total += i.getTaxedPrice();
+                            }
+                            cout << setw(15) << left << "" << "*" << setw(15) << "" << "*" << setw(15) << "" << "\n";
+                            cout << setw(15) << left << "" << "*" << setw(15) << "" << "*" << setw(15) << "" << "\n";
+                            cout << setw(15) << left << "TOTAL" << "*" << setw(5) << "    $" << right << setw(10)
+                                 << setprecision(2) << fixed << total << "*" << setw(15) << "" << "\n";
+                            itemCart_untaxable = {};
+                            itemCart_taxable = {};
+                            itemCart_grocery = {};
+                            itemCart_book = {};
+                            main();
+                            break;
+                        }
+                        default: {
+                            cerr << "This action is not available.\n";
+                            break;
+                        }
                     }
+                    break;
                 }
-                break;
-            }
-            case 2: {
-                generateLogInPanel();
-                break;
-            }
-            case 3: {
-                cout << "Program exiting. Goodbye.\n";
-                return 0;
-            }
-            default: {
-                break;
+                case 2: {
+                    generateLogInPanel();
+                    break;
+                }
+                case 3: {
+                    cout << "Program exiting. Goodbye.\n";
+                    return 0;
+                }
+                default: {
+                    break;
+                }
             }
         }
     }
-  }
 
 
     return 0;
 }
 
-void generateLogInPanel(){
+void generateLogInPanel() {
     const string correctPass = "11111";
     string password;
     cout << "Enter the admin password:\n";
     cin >> password;
-    if(password != "11111")
-    {
+    if (password != "11111") {
         cout << "You have entered the wrong password. Returning to main menu.\n";
         main();
-    }
-    else
-    {
+    } else {
         generateLoggedAdminPanel();
     }
 
 }
-void generateLoggedAdminPanel(){
-    int choice  = 0;
+
+void generateLoggedAdminPanel() {
+    int choice = 0;
     cout << "Welcome, admin.\n\n";
-    while(choice < 1 || choice > 4){
+    while (choice < 1 || choice > 4) {
         cout << setw(60) << setfill('*') << "" << "\n"
              << setfill(' ') << setw(59) << left << "*" << "*\n"
              << setw(59) << "*    1) Add an Item to Catalog" << "*\n"
@@ -238,12 +275,12 @@ void generateLoggedAdminPanel(){
              << setw(59) << "*" << "*\n"
              << setw(60) << setfill('*') << "" << "\n";
         cin >> choice;
-        if (choice < 1 || choice > 4){cout << "You have entered an invalid option. Please try again.\n";}
+        if (choice < 1 || choice > 4) { cout << "You have entered an invalid option. Please try again.\n"; }
     }
-    switch(choice){
+    switch (choice) {
         case 1: {
             int type = 0;
-            while(type < 1 || type > 3){
+            while (type < 1 || type > 3) {
                 cout << setw(60) << setfill('*') << "" << "\n"
                      << setfill(' ') << setw(59) << left << "*" << "*\n"
                      << setw(59) << "*    What category does the item best fit in?" << "*\n"
@@ -254,9 +291,9 @@ void generateLoggedAdminPanel(){
                      << setw(59) << "*" << "*\n"
                      << setw(60) << setfill('*') << "" << "\n";
                 cin >> type;
-                if (type < 1 || type > 3){cout << "You have entered an invalid option. Please try again.\n";}
+                if (type < 1 || type > 3) { cout << "You have entered an invalid option. Please try again.\n"; }
             }
-            switch(type) {
+            switch (type) {
                 case 1: {
                     string title, author;
                     string isbn, bar;
@@ -270,11 +307,9 @@ void generateLoggedAdminPanel(){
                     getline(cin, author);
                     cin.ignore(256, '\n');
                     cout << "What is the ISBN number of this title(do not include dashes)? (Enter 0 if unsure)\n";
-                    while((isbn.length() < 10 || isbn.length() > 13) && isbn != "0")
-                    {
+                    while ((isbn.length() < 10 || isbn.length() > 13) && isbn != "0") {
                         cin >> isbn;
-                        if((isbn.length() < 10 || isbn.length() > 13) && isbn != "0")
-                        {
+                        if ((isbn.length() < 10 || isbn.length() > 13) && isbn != "0") {
                             cout << "Invalid isbn number. Enter again." << endl;
                             isbn = " ";
                         } else {
@@ -287,15 +322,12 @@ void generateLoggedAdminPanel(){
                         }
                     }
                     cout << "What is the bar code for this title? (Enter 0 if unsure)\n";
-                    while (bar.length() != 13 && bar != "0")
-                    {
+                    while (bar.length() != 13 && bar != "0") {
                         cin >> bar;
-                        if(bar.length() != 13 && bar != "0")
-                        {
+                        if (bar.length() != 13 && bar != "0") {
                             cout << "Invalid barcode" << endl;
                             bar = " ";
-                        }
-                        else {
+                        } else {
                             for (int i = 0; i < bar.length(); i++) {
                                 if (isdigit(bar[i]) == 0) {
                                     cout << "Invalid barcode" << endl;
@@ -342,27 +374,21 @@ void generateLoggedAdminPanel(){
                     cout << "What is the base price of this item?\n";
                     cin >> base;
                     cout << "What is the expiration date?  (Enter month, day, then year in digits)\n";
-                    while(month <= 0 || month > 12)
-                    {
+                    while (month <= 0 || month > 12) {
                         cin >> month;
-                        if(month <= 0 || month > 12)
-                        {
+                        if (month <= 0 || month > 12) {
                             cout << "Invalid month, enter again";
                         }
                     }
-                    while(day <= 0 || day > 31)
-                    {
+                    while (day <= 0 || day > 31) {
                         cin >> day;
-                        if(day <= 0 || day > 31)
-                        {
+                        if (day <= 0 || day > 31) {
                             cout << "Invalid day, enter again";
                         }
                     }
-                    while(year < 1000 || year > 9999)
-                    {
+                    while (year < 1000 || year > 9999) {
                         cin >> year;
-                        if(year < 1000 || year > 9999)
-                        {
+                        if (year < 1000 || year > 9999) {
                             cout << "Invalid year, enter again";
                         }
                     }
@@ -430,7 +456,7 @@ void generateLoggedAdminPanel(){
         }
         case 2: {
             int type = 0;
-            while(type < 1 || type > 4){
+            while (type < 1 || type > 4) {
                 cout << setw(60) << setfill('*') << "" << "\n"
                      << setfill(' ') << setw(59) << left << "*" << "*\n"
                      << setw(59) << "*    What category is the item in?" << "*\n"
@@ -442,14 +468,14 @@ void generateLoggedAdminPanel(){
                      << setw(59) << "*" << "*\n"
                      << setw(60) << setfill('*') << "" << "\n";
                 cin >> type;
-                if (type < 1 || type > 4){cout << "You have entered an invalid option. Please try again.\n";}
+                if (type < 1 || type > 4) { cout << "You have entered an invalid option. Please try again.\n"; }
             }
             cout << setw(60) << setfill('*') << "" << "\n"
                  << setfill(' ') << setw(59) << left << "*" << "*\n"
                  << setfill(' ') << setw(59) << left << "*    Which item do you wish to edit? " << "*\n"
                  << setfill(' ') << setw(59) << left << "*" << "*\n";
             int c = 1, select, fieldSelect;
-            switch(type) {
+            switch (type) {
                 case 1: {
                     for (const BookItem i : itemCatalog_book) {
                         cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
@@ -746,7 +772,7 @@ void generateLoggedAdminPanel(){
         }
         case 3: {
             int type = 0;
-            while(type < 1 || type > 4){
+            while (type < 1 || type > 4) {
                 cout << setw(60) << setfill('*') << "" << "\n"
                      << setfill(' ') << setw(59) << left << "*" << "*\n"
                      << setw(59) << "*    What category is the item in?" << "*\n"
@@ -758,14 +784,14 @@ void generateLoggedAdminPanel(){
                      << setw(59) << "*" << "*\n"
                      << setw(60) << setfill('*') << "" << "\n";
                 cin >> type;
-                if (type < 1 || type > 4){cout << "You have entered an invalid option. Please try again.\n";}
+                if (type < 1 || type > 4) { cout << "You have entered an invalid option. Please try again.\n"; }
             }
             cout << setw(60) << setfill('*') << "" << "\n"
                  << setfill(' ') << setw(59) << left << "*" << "*\n"
                  << setfill(' ') << setw(59) << left << "*    Which item do you wish to delete? " << "*\n"
                  << setfill(' ') << setw(59) << left << "*" << "*\n";
             int c = 1, select;
-            switch(type) {
+            switch (type) {
                 case 1: {
                     for (const BookItem i : itemCatalog_book) {
                         cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
@@ -830,7 +856,7 @@ void generateLoggedAdminPanel(){
     }
 }
 
-void readCatalog(){
+void readCatalog() {
     ifstream catFile;
     catFile.open("items.cat");
     string s;
@@ -838,31 +864,32 @@ void readCatalog(){
     itemCatalog_taxable = {};
     itemCatalog_grocery = {};
     itemCatalog_book = {};
-    while (getline(catFile, s))
-    {
+    while (getline(catFile, s)) {
         decodeToItem(s);
     }
     catFile.close();
 }
-void writeCatalog(){
+
+void writeCatalog() {
     ofstream catFile;
     catFile.open("items.cat");
-    for(const Item i : itemCatalog_untaxable){
+    for (const Item i : itemCatalog_untaxable) {
         catFile << encodeToString(i) << "\n";
     }
-    for(const TaxableItem i : itemCatalog_taxable){
+    for (const TaxableItem i : itemCatalog_taxable) {
         catFile << encodeToString(i) << "\n";
     }
-    for(const GroceryItem i : itemCatalog_grocery){
+    for (const GroceryItem i : itemCatalog_grocery) {
         catFile << encodeToString(i) << "\n";
     }
-    for(const BookItem i : itemCatalog_book){
+    for (const BookItem i : itemCatalog_book) {
         catFile << encodeToString(i) << "\n";
     }
     catFile.close();
 };
-void decodeToItem(string s){
-    if (s.find("TAXABLE") == 0){
+
+void decodeToItem(string s) {
+    if (s.find("TAXABLE") == 0) {
         TaxableItem i;
         //Parse string as taxable item
         unsigned long firstSentinel = s.find_first_of("|");
@@ -875,7 +902,7 @@ void decodeToItem(string s){
         s = s.substr(firstSentinel + 1, s.length() - 1);
         i.setTaxRate(stod(s.substr(0, s.length())));
         itemCatalog_taxable.push_back(i);
-    } else if (s.find("UNTAXABLE") == 0){
+    } else if (s.find("UNTAXABLE") == 0) {
         Item i;
         //Parse string as generic untaxable item
         unsigned long firstSentinel = s.find_first_of("|");
@@ -885,7 +912,7 @@ void decodeToItem(string s){
         s = s.substr(firstSentinel + 1, s.length() - 1);
         i.setBasePrice(stod(s.substr(0, s.length())));
         itemCatalog_untaxable.push_back(i);
-    } else if (s.find("BOOK") == 0){
+    } else if (s.find("BOOK") == 0) {
         BookItem i;
         //Parse string as book item
         unsigned long firstSentinel = s.find_first_of("|");
@@ -900,14 +927,14 @@ void decodeToItem(string s){
         i.setTaxRate(stod(s.substr(0, firstSentinel)));
         s = s.substr(firstSentinel + 1, s.length() - 1);
         firstSentinel = s.find_first_of("|");
-        i.setAuthor(s.substr(0,firstSentinel));
+        i.setAuthor(s.substr(0, firstSentinel));
         s = s.substr(firstSentinel + 1, s.length() - 1);
         firstSentinel = s.find_first_of("|");
         i.setBar(s.substr(0, firstSentinel));
         s = s.substr(firstSentinel + 1, s.length() - 1);
         i.setIsbn(s.substr(0, s.length()));
         itemCatalog_book.push_back(i);
-    } else if (s.find("GROCERY") == 0){
+    } else if (s.find("GROCERY") == 0) {
         GroceryItem i;
         string ed;
         int day, month, year;
@@ -916,7 +943,7 @@ void decodeToItem(string s){
         s = s.substr(firstSentinel + 1, s.length() - 1);
         firstSentinel = s.find_first_of("|");
         i.setName(s.substr(0, firstSentinel));
-        s = s.substr(firstSentinel + 1, s.length() -1);
+        s = s.substr(firstSentinel + 1, s.length() - 1);
         firstSentinel = s.find_first_of("|");
         i.setBasePrice(stod(s.substr(0, firstSentinel)));
         s = s.substr(firstSentinel + 1, s.length() - 1);
@@ -939,29 +966,32 @@ void decodeToItem(string s){
         cerr << "Item type cannot be parsed from file.\n";
     }
 }
-string encodeToString(Item i){
+
+string encodeToString(Item i) {
     string s;
     s = "UNTAXABLE|" + i.getName() + "|" + to_string(i.getBasePrice());
     // {Type} {Name} {Base Price}
     return s;
 }
-string encodeToString(TaxableItem i){
+
+string encodeToString(TaxableItem i) {
     string s;
     s = "TAXABLE|" + i.getName() + "|" + to_string(i.getBasePrice()) + "|" + to_string(i.getTaxRate());
     return s;
 }
-string encodeToString(GroceryItem i){
+
+string encodeToString(GroceryItem i) {
     string s;
     int day, month, year;
     string exp;
     day = i.getExpiration().day;
-    if (day < 10){
+    if (day < 10) {
         exp = "0" + to_string(day) + ".";
     } else {
         exp = to_string(day) + ".";
     }
     month = i.getExpiration().month;
-    if (month < 10){
+    if (month < 10) {
         exp = exp + "0" + to_string(month) + ".";
     } else {
         exp = exp + to_string(month) + ".";
@@ -971,8 +1001,10 @@ string encodeToString(GroceryItem i){
     s = "GROCERY|" + i.getName() + "|" + to_string(i.getBasePrice()) + "|" + exp;
     return s;
 }
-string encodeToString(BookItem i){
+
+string encodeToString(BookItem i) {
     string s;
-    s = "BOOK|" + i.getName() + "|" + to_string(i.getBasePrice()) + "|" + to_string(i.getTaxRate()) + "|" + i.getAuthor() + "|" + i.getBar() + "|" + i.getIsbn();
+    s = "BOOK|" + i.getName() + "|" + to_string(i.getBasePrice()) + "|" + to_string(i.getTaxRate()) + "|" +
+        i.getAuthor() + "|" + i.getBar() + "|" + i.getIsbn();
     return s;
 }
