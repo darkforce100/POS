@@ -9,7 +9,7 @@ void TaxableItem::setTaxRate(double r){
 }
 
 double TaxableItem::getTaxRate() const {
-    return TaxableItem::taxRate;
+    return TaxableItem::taxRate * 100;
 }
 
 double TaxableItem::getTaxedPrice() const {
@@ -17,7 +17,7 @@ double TaxableItem::getTaxedPrice() const {
 }
 
 double TaxableItem::getTaxAmount() const {
-    return TaxableItem::basePrice * TaxableItem::taxRate;
+    return TaxableItem::basePrice * (TaxableItem::taxRate);
 }
 string TaxableItem::getType() const {
     return "TAXABLE";
