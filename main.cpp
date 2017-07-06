@@ -18,7 +18,6 @@ string encodeToString(TaxableItem);
 string encodeToString(GroceryItem);
 string encodeToString(BookItem);
 int main();
-
 vector <Item> itemCatalog_untaxable;
 vector <TaxableItem> itemCatalog_taxable;
 vector <GroceryItem> itemCatalog_grocery;
@@ -340,15 +339,117 @@ void generateLoggedAdminPanel(){
                  << setfill(' ') << setw(59) << left << "*" << "*\n"
                  << setfill(' ') << setw(59) << left << "*    Which item do you wish to edit? " << "*\n"
                  << setfill(' ') << setw(59) << left << "*" << "*\n";
-            int c = 1, select;
+            int c = 1, select, fieldSelect;
             switch(type) {
                 case 1: {
                     for (const BookItem i : itemCatalog_book) {
                         cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
                         c++;
                     }
+                    cout << setfill(' ') << setw(59) << left << "*" << "*\n"
+                         << setw(60) << setfill('*') << "" << "\n";
                     cin >> select;
-                    //TODO edit a book
+                    cout << setw(60) << setfill('*') << "" << "\n"
+                         << setfill(' ') << setw(59) << left << "*" << "*\n"
+                         << setw(59) << "*    Which field do you wish to edit? " << "*\n"
+                         << setw(59) << "*" << "*\n"
+                         << setw(59) << "*    1) Title" << "*\n"
+                         << setw(59) << "*    2) Author" << "*\n"
+                         << setw(59) << "*    3) Base Price" << "*\n"
+                         << setw(59) << "*    4) Tax Rate" << "*\n"
+                         << setw(59) << "*    5) ISBN" << "*\n"
+                         << setw(59) << "*    6) Bar Code" << "*\n"
+                         << setw(59) << "*" << "*\n"
+                         << setfill('*') << setw(60) << "" << "\n";
+                    cin >> fieldSelect;
+                    switch (fieldSelect) {
+                        case 1: {
+                            string title;
+                            cout << "The current title is "
+                                 << itemCatalog_book.at((unsigned long) (select - 1)).getName() << "\n";
+                            cout << "What should the amended title be?\n";
+                            cin.ignore();
+                            getline(cin, title);
+                            itemCatalog_book.at((unsigned long) (select - 1)).setName(title);
+                            break;
+                        }
+                        case 2: {
+                            string author;
+                            cout << "The current author is "
+                                 << itemCatalog_book.at((unsigned long) (select - 1)).getAuthor() << "\n";
+                            cout << "What should the amended author be?\n";
+                            cin.ignore();
+                            getline(cin, author);
+                            itemCatalog_book.at((unsigned long) (select - 1)).setAuthor(author);
+                            break;
+                        }
+                        case 3: {
+                            double base;
+                            cout << "The current price is " << setprecision(2) << fixed
+                                 << itemCatalog_book.at((unsigned long) (select - 1)).getBasePrice() << "\n";
+                            cout << "What should the amended price be?\n";
+                            cin >> base;
+                            itemCatalog_book.at((unsigned long) (select - 1)).setBasePrice(base);
+                            break;
+                        }
+                        case 4: {
+                            double tax;
+                            cout << "The current tax rate is " << setprecision(2) << fixed
+                                 << itemCatalog_book.at((unsigned long) (select - 1)).getTaxRate() * 100 << "%\n";
+                            cout << "What should the new tax rate (as a percentage) be?\n";
+                            cin >> tax;
+                            itemCatalog_book.at((unsigned long) (select - 1)).setTaxRate(tax);
+                            break;
+                        }
+                        case 5: {
+                            string isbn;
+                            cout << "The current ISBN is "
+                                 << itemCatalog_book.at((unsigned long) (select - 1)).getIsbn() << "\n";
+                            cout
+                                    << "What is the amended ISBN number of this title(do not include dashes)? (Enter 0 if unsure)\n";
+                            while ((isbn.length() < 10 || isbn.length() > 13) && isbn != "0") {
+                                cin >> isbn;
+                                if ((isbn.length() < 10 || isbn.length() > 13) && isbn != "0") {
+                                    cout << "Invalid isbn number. Enter again." << endl;
+                                    isbn = " ";
+                                } else {
+                                    for (int i = 0; i < isbn.length(); i++) {
+                                        if (isdigit((isbn[i])) == 0) {
+                                            cout << "Invalid isbn number. Enter again." << endl;
+                                            isbn = " ";
+                                        }
+                                    }
+                                }
+                            }
+                            itemCatalog_book.at((unsigned long) (select - 1)).setIsbn(isbn);
+                            break;
+                        }
+                        case 6: {
+                            string bar;
+                            cout << "The current bar is " << itemCatalog_book.at((unsigned long) (select - 1)).getBar()
+                                 << "\n";
+                            cout << "What is the bar code for this title? (Enter 0 if unsure)\n";
+                            while (bar.length() != 13 && bar != "0") {
+                                cin >> bar;
+                                if (bar.length() != 13 && bar != "0") {
+                                    cout << "Invalid barcode" << endl;
+                                    bar = " ";
+                                } else {
+                                    for (int i = 0; i < bar.length(); i++) {
+                                        if (isdigit(bar[i]) == 0) {
+                                            cout << "Invalid barcode" << endl;
+                                            bar = " ";
+                                        }
+                                    }
+                                }
+                            }
+                            itemCatalog_book.at((unsigned long) (select - 1)).setBar(bar);
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
                     break;
                 }
                 case 2: {
@@ -356,8 +457,76 @@ void generateLoggedAdminPanel(){
                         cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
                         c++;
                     }
+                    cout << setfill(' ') << setw(59) << left << "*" << "*\n"
+                         << setw(60) << setfill('*') << "" << "\n";
                     cin >> select;
-                    //TODO edit a grocery
+                    cout << setw(60) << setfill('*') << "" << "\n"
+                         << setfill(' ') << setw(59) << left << "*" << "*\n"
+                         << setw(59) << "*    Which field do you wish to edit? " << "*\n"
+                         << setw(59) << "*" << "*\n"
+                         << setw(59) << "*    1) Title" << "*\n"
+                         << setw(59) << "*    2) Base Price" << "*\n"
+                         << setw(59) << "*    3) Expiration Date" << "*\n"
+                         << setw(59) << "*" << "*\n"
+                         << setfill('*') << setw(60) << "" << "\n";
+                    cin >> fieldSelect;
+                    switch (fieldSelect) {
+                        case 1: {
+                            string title;
+                            cout << "The current title is "
+                                 << itemCatalog_grocery.at((unsigned long) (select - 1)).getName() << "\n";
+                            cout << "What should the amended title be?\n";
+                            cin.ignore();
+                            getline(cin, title);
+                            itemCatalog_grocery.at((unsigned long) (select - 1)).setName(title);
+                            break;
+                        }
+                        case 2: {
+                            double base;
+                            cout << "The current price is " << setprecision(2) << fixed
+                                 << itemCatalog_grocery.at((unsigned long) (select - 1)).getBasePrice() << "\n";
+                            cout << "What should the amended price be?\n";
+                            cin >> base;
+                            itemCatalog_grocery.at((unsigned long) (select - 1)).setBasePrice(base);
+                            break;
+                        }
+                        case 3: {
+                            td_s expiration;
+                            int month = 0, day = 0, year = 0;
+                            cout << "The current price is "
+                                 << itemCatalog_grocery.at((unsigned long) (select - 1)).getExpiration().day << "/"
+                                 << itemCatalog_grocery.at((unsigned long) (select - 1)).getExpiration().month << "/"
+                                 << itemCatalog_grocery.at((unsigned long) (select - 1)).getExpiration().year << "/"
+                                 << "\n";
+                            cout << "What is the amended expiration date?  (Enter month, day, then year in digits)\n";
+                            while (month <= 0 || month > 12) {
+                                cin >> month;
+                                if (month <= 0 || month > 12) {
+                                    cout << "Invalid month, enter again";
+                                }
+                            }
+                            while (day <= 0 || day > 31) {
+                                cin >> day;
+                                if (day <= 0 || day > 31) {
+                                    cout << "Invalid day, enter again";
+                                }
+                            }
+                            while (year < 1000 || year > 9999) {
+                                cin >> year;
+                                if (year < 1000 || year > 9999) {
+                                    cout << "Invalid year, enter again";
+                                }
+                            }
+                            expiration.month = month;
+                            expiration.day = day;
+                            expiration.year = year;
+                            itemCatalog_grocery.at((unsigned long) (select - 1)).setExpiration(expiration);
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
                     break;
                 }
                 case 3: {
@@ -365,8 +534,42 @@ void generateLoggedAdminPanel(){
                         cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
                         c++;
                     }
+                    cout << setfill(' ') << setw(59) << left << "*" << "*\n"
+                         << setw(60) << setfill('*') << "" << "\n";
                     cin >> select;
-                    //TODO edit an untaxable
+                    cout << setw(60) << setfill('*') << "" << "\n"
+                         << setfill(' ') << setw(59) << left << "*" << "*\n"
+                         << setw(59) << "*    Which field do you wish to edit? " << "*\n"
+                         << setw(59) << "*" << "*\n"
+                         << setw(59) << "*    1) Title" << "*\n"
+                         << setw(59) << "*    2) Base Price" << "*\n"
+                         << setw(59) << "*" << "*\n"
+                         << setfill('*') << setw(60) << "" << "\n";
+                    cin >> fieldSelect;
+                    switch (fieldSelect) {
+                        case 1: {
+                            string title;
+                            cout << "The current title is "
+                                 << itemCatalog_untaxable.at((unsigned long) (select - 1)).getName() << "\n";
+                            cout << "What should the amended title be?\n";
+                            cin.ignore();
+                            getline(cin, title);
+                            itemCatalog_untaxable.at((unsigned long) (select - 1)).setName(title);
+                            break;
+                        }
+                        case 2: {
+                            double base;
+                            cout << "The current price is " << setprecision(2) << fixed
+                                 << itemCatalog_untaxable.at((unsigned long) (select - 1)).getBasePrice() << "\n";
+                            cout << "What should the amended price be?\n";
+                            cin >> base;
+                            itemCatalog_untaxable.at((unsigned long) (select - 1)).setBasePrice(base);
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
                     break;
                 }
                 case 4: {
@@ -374,8 +577,52 @@ void generateLoggedAdminPanel(){
                         cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
                         c++;
                     }
+                    cout << setfill(' ') << setw(59) << left << "*" << "*\n"
+                         << setw(60) << setfill('*') << "" << "\n";
                     cin >> select;
-                    //TODO edit a taxable
+                    cout << setw(60) << setfill('*') << "" << "\n"
+                         << setfill(' ') << setw(59) << left << "*" << "*\n"
+                         << setw(59) << "*    Which field do you wish to edit? " << "*\n"
+                         << setw(59) << "*" << "*\n"
+                         << setw(59) << "*    1) Title" << "*\n"
+                         << setw(59) << "*    2) Base Price" << "*\n"
+                         << setw(59) << "*    3) Tax Rate" << "*\n"
+                         << setw(59) << "*" << "*\n"
+                         << setfill('*') << setw(60) << "" << "\n";
+                    cin >> fieldSelect;
+                    switch (fieldSelect) {
+                        case 1: {
+                            string title;
+                            cout << "The current title is "
+                                 << itemCatalog_taxable.at((unsigned long) (select - 1)).getName() << "\n";
+                            cout << "What should the amended title be?\n";
+                            cin.ignore();
+                            getline(cin, title);
+                            itemCatalog_taxable.at((unsigned long) (select - 1)).setName(title);
+                            break;
+                        }
+                        case 2: {
+                            double base;
+                            cout << "The current price is " << setprecision(2) << fixed
+                                 << itemCatalog_taxable.at((unsigned long) (select - 1)).getBasePrice() << "\n";
+                            cout << "What should the amended price be?\n";
+                            cin >> base;
+                            itemCatalog_taxable.at((unsigned long) (select - 1)).setBasePrice(base);
+                            break;
+                        }
+                        case 3: {
+                            double tax;
+                            cout << "The current tax rate is " << setprecision(2) << fixed
+                                 << itemCatalog_taxable.at((unsigned long) (select - 1)).getTaxRate() * 100 << "%\n";
+                            cout << "What should the new tax rate (as a percentage) be?\n";
+                            cin >> tax;
+                            itemCatalog_taxable.at((unsigned long) (select - 1)).setTaxRate(tax);
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
                     break;
                 }
                 default: {
@@ -480,7 +727,6 @@ void readCatalog(){
     }
     catFile.close();
 }
-
 void writeCatalog(){
     ofstream catFile;
     catFile.open("items.cat");
@@ -498,7 +744,6 @@ void writeCatalog(){
     }
     catFile.close();
 };
-
 void decodeToItem(string s){
     if (s.find("TAXABLE") == 0){
         TaxableItem i;
