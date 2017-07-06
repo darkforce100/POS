@@ -24,70 +24,123 @@ vector <GroceryItem> itemCatalog_grocery;
 vector <BookItem> itemCatalog_book;
 
 int main() {
-
-    /**
-     * DEBUG ONLY DELETE FOR PROD
-     * **/
-    Item i;
-    i.setName("Llamas");
-    i.setBasePrice(20.00);
-    itemCatalog_untaxable.push_back(i);
-    GroceryItem g;
-    g.setName("Fruitcake");
-    g.setBasePrice(123.45);
-    itemCatalog_grocery.push_back(g);
-    /**
-    * DEBUG ONLY DELETE FOR PROD
-    * **/
-
+    readCatalog();
   int choice = 0;
-  while(choice < 1 || choice > 3){
+  while(choice < 1 || choice > 2){
     cout << setw(60) << setfill('*') << "" << "\n"
          << setfill(' ') << setw(59) << left << "*" << "*\n"
          << setw(59) << "*    1) New Transaction" << "*\n"
          << setw(59) << "*    2) Log In As Administrator" << "*\n"
-         << setw(59) << "*    3) Generate Report" << "*\n"
          << setw(59) << "*" << "*\n"
          << setw(60) << setfill('*') << "" << "\n";
       cin >> choice;
-    if (choice < 1 || choice > 3){cout << "You have entered an invalid option. Please try again.\n";}
+    if (choice < 1 || choice > 2){cout << "You have entered an invalid option. Please try again.\n";}
   }
   switch(choice){
     case 1: {
-        //TODO Enable item search to add to cart
-        cout << "You can search items by title.\n"
-             << "Entering \"list\", \"catalog\", or \"all\" will list all items in the catalog by title.\n"
-             << "Enter a term to search by below:\n";
-        string searchTerm;
-        cin >> searchTerm;
-        for (Item i : itemCatalog_untaxable) {
-            if (i.getName().find(searchTerm) != string::npos) {
-                //TODO add i to menu
-            }
+        vector <Item> itemCart_untaxable;
+        vector <TaxableItem> itemCart_taxable;
+        vector <GroceryItem> itemCart_grocery;
+        vector <BookItem> itemCart_book;
+
+        int type = 0;
+        while(type < 1 || type > 4){
+            cout << setw(60) << setfill('*') << "" << "\n"
+                 << setfill(' ') << setw(59) << left << "*" << "*\n"
+                 << setw(59) << "*    What category is the selected item in?" << "*\n"
+                 << setw(59) << "*" << "*\n"
+                 << setw(59) << "*    1) Books" << "*\n"
+                 << setw(59) << "*    2) Grocery" << "*\n"
+                 << setw(59) << "*    3) Other (Untaxable)" << "*\n"
+                 << setw(59) << "*    4) Other (Taxable)" << "*\n"
+                 << setw(59) << "*" << "*\n"
+                 << setw(60) << setfill('*') << "" << "\n";
+            cin >> type;
+            if (type < 1 || type > 4){cout << "You have entered an invalid option. Please try again.\n";}
         }
-        for (TaxableItem i : itemCatalog_taxable) {
-            if (i.getName().find(searchTerm) != string::npos) {
-                //TODO add i to menu
+        cout << setw(60) << setfill('*') << "" << "\n"
+             << setfill(' ') << setw(59) << left << "*" << "*\n"
+             << setfill(' ') << setw(59) << left << "*    Which item do you wish to add to the cart? " << "*\n"
+             << setfill(' ') << setw(59) << left << "*" << "*\n";
+        int select, c = 1;
+        switch(type) {
+            case 1:{
+                for (const BookItem i : itemCatalog_book) {
+                    cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
+                    c++;
+                }
+                cin >> select;
+                itemCart_book.push_back((BookItem &&) itemCatalog_book.at((unsigned long) (select - 1)));
+                cout << "Added to cart.";
+                break;
             }
-        }
-        for (BookItem i : itemCatalog_book) {
-            if (i.getName().find(searchTerm) != string::npos) {
-                //TODO add i to menu
+            case 2:{
+                for (const GroceryItem i : itemCatalog_grocery) {
+                    cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
+                    c++;
+                }
+                cin >> select;
+                itemCart_grocery.push_back((GroceryItem &&) itemCatalog_grocery.at((unsigned long) (select - 1)));
+                cout << "Added to cart.";
+                break;
             }
+            case 3:{
+                for (const Item i : itemCatalog_untaxable) {
+                    cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
+                    c++;
+                }
+                cin >> select;
+                itemCart_untaxable.push_back((Item &&) itemCatalog_untaxable.at((unsigned long) (select - 1)));
+                cout << "Added to cart.";
+                break;
+            }
+            case 4:{
+                for (const TaxableItem i : itemCatalog_taxable) {
+                    cout << setfill(' ') << left << "*    " << c << ") " << setw(51) << i.getName() << "*\n";
+                    c++;
+                }
+                cin >> select;
+                itemCart_taxable.push_back((TaxableItem &&) itemCatalog_taxable.at((unsigned long) (select - 1)));
+                cout << "Added to cart.";
+                break;
+            }
+            default:{
+                //TODO ERROR
+                break;
+            }
+
         }
-        for (GroceryItem i : itemCatalog_grocery) {
-            if (i.getName().find(searchTerm) != string::npos) {
-                //TODO add i to menu
+        int cont = 0;
+        while(type < 1 || type > 2){
+            cout << setw(60) << setfill('*') << "" << "\n"
+                 << setfill(' ') << setw(59) << left << "*" << "*\n"
+                 << setw(59) << "*    Would you like to add another item?" << "*\n"
+                 << setw(59) << "*" << "*\n"
+                 << setw(59) << "*    1) Add Item" << "*\n"
+                 << setw(59) << "*    2) Finalize and Print Reciept" << "*\n"
+                 << setw(59) << "*" << "*\n"
+                 << setw(60) << setfill('*') << "" << "\n";
+            cin >> cont;
+            if (type < 1 || type > 2){cout << "You have entered an invalid option. Please try again.\n";}
+        }
+        switch(cont){
+            case 1: {
+                choice = 1;
+                break;
+            }
+            case 2: {
+                //TODO print receipt
+                break;
+            }
+            default: {
+                //TODO ERROR
+                break;
             }
         }
         break;
     }
     case 2: {
         generateLogInPanel();
-        break;
-    }
-    case 3: {
-        //TODO generate a sales report
         break;
     }
     default: {
@@ -117,14 +170,13 @@ void generateLogInPanel(){
 void generateLoggedAdminPanel(){
     int choice  = 0;
     cout << "Welcome, admin.\n\n";
-    readCatalog();
     while(choice < 1 || choice > 4){
         cout << setw(60) << setfill('*') << "" << "\n"
              << setfill(' ') << setw(59) << left << "*" << "*\n"
              << setw(59) << "*    1) Add an Item to Catalog" << "*\n"
              << setw(59) << "*    2) Edit an Item in Catalog" << "*\n"
              << setw(59) << "*    3) Delete an Item from Catalog" << "*\n"
-             << setw(59) << "*    4) Return to Main" << "*\n"
+             << setw(59) << "*    4) Log Out" << "*\n"
              << setw(59) << "*" << "*\n"
              << setw(60) << setfill('*') << "" << "\n";
         cin >> choice;
@@ -302,7 +354,6 @@ void generateLoggedAdminPanel(){
                         i.setName(title);
                         i.setBasePrice(base);
                         i.setTaxRate(tax);
-                        cout << title << "!";
                         itemCatalog_taxable.push_back(i);
                     } else {
                         Item i;
@@ -493,10 +544,10 @@ void generateLoggedAdminPanel(){
                         case 3: {
                             td_s expiration;
                             int month = 0, day = 0, year = 0;
-                            cout << "The current price is "
+                            cout << "The current expiration date is "
                                  << itemCatalog_grocery.at((unsigned long) (select - 1)).getExpiration().day << "/"
                                  << itemCatalog_grocery.at((unsigned long) (select - 1)).getExpiration().month << "/"
-                                 << itemCatalog_grocery.at((unsigned long) (select - 1)).getExpiration().year << "/"
+                                 << itemCatalog_grocery.at((unsigned long) (select - 1)).getExpiration().year
                                  << "\n";
                             cout << "What is the amended expiration date?  (Enter month, day, then year in digits)\n";
                             while (month <= 0 || month > 12) {
@@ -756,7 +807,7 @@ void decodeToItem(string s){
         firstSentinel = s.find_first_of("|");
         i.setBasePrice(stod(s.substr(0, firstSentinel)));
         s = s.substr(firstSentinel + 1, s.length() - 1);
-        i.setTaxRate(100 * stod(s.substr(0, s.length() - 1)));
+        i.setTaxRate(100 * stod(s.substr(0, s.length())));
         itemCatalog_taxable.push_back(i);
     } else if (s.find("UNTAXABLE") == 0){
         Item i;
@@ -766,7 +817,7 @@ void decodeToItem(string s){
         firstSentinel = s.find_first_of("|");
         i.setName(s.substr(0, firstSentinel));
         s = s.substr(firstSentinel + 1, s.length() - 1);
-        i.setBasePrice(stod(s.substr(0, s.length() - 1)));
+        i.setBasePrice(stod(s.substr(0, s.length())));
         itemCatalog_untaxable.push_back(i);
     } else if (s.find("BOOK") == 0){
         BookItem i;
@@ -788,7 +839,7 @@ void decodeToItem(string s){
         firstSentinel = s.find_first_of("|");
         i.setBar(s.substr(0, firstSentinel));
         s = s.substr(firstSentinel + 1, s.length() - 1);
-        i.setIsbn(s.substr(0, s.length() - 1));
+        i.setIsbn(s.substr(0, s.length()));
         itemCatalog_book.push_back(i);
     } else if (s.find("GROCERY") == 0){
         GroceryItem i;
@@ -803,7 +854,7 @@ void decodeToItem(string s){
         firstSentinel = s.find_first_of("|");
         i.setBasePrice(stod(s.substr(0, firstSentinel)));
         s = s.substr(firstSentinel + 1, s.length() - 1);
-        ed = s.substr(0, s.length() - 1);
+        ed = s.substr(0, s.length());
 
         firstSentinel = ed.find_first_of(".");
         day = stoi(ed.substr(0, firstSentinel));
@@ -811,7 +862,7 @@ void decodeToItem(string s){
         firstSentinel = ed.find_first_of(".");
         month = stoi(ed.substr(0, firstSentinel));
         ed = ed.substr(firstSentinel + 1, ed.length() - 1);
-        year = stoi(ed.substr(0, ed.length() - 1));
+        year = stoi(ed.substr(0, ed.length()));
         td_s exp;
         exp.day = day;
         exp.month = month;
@@ -820,7 +871,7 @@ void decodeToItem(string s){
         itemCatalog_grocery.push_back(i);
     } else {
         //This should never ever happen :(
-        cerr << "FATAL ERROR - Mkpt 1" << s;
+        //TODO ERROR
     }
 }
 string encodeToString(Item i){
