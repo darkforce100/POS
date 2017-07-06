@@ -129,7 +129,37 @@ int main() {
                 break;
             }
             case 2: {
-                //TODO print receipt
+                double total = 0;
+                cout << setw(15) << left << setfill(' ') << "Title" << "*" << setw(15) << "Total" << "*" << setw(15) << "Tax" << "\n";
+                cout << setw(15) << left << "" << "*" << setw(15) << "" << "*" << setw(15) << "" << "\n";
+                for (Item i : itemCart_untaxable){
+                    cout << setw(15) << left << i.getName() << "*" << setw(5) << "Sub $" << setw(10) << setprecision(2) << fixed << right << i.getBasePrice() << "*" << setw(5) << left << "Rate" << setw(9) << right << 0 << "%\n";
+                    cout << setw(15) << left << "" << "*" << setw(5) << "  + $" << right << setprecision(2) << fixed << 0 << "*" << left << setw(5) << "  = $" << setw(10) << right << i.getBasePrice() << "\n";
+                    total += i.getBasePrice();
+                }
+                for (TaxableItem i : itemCart_taxable){
+                    cout << setw(15) << left << i.getName() << "*" << setw(5) << "Sub $" << setw(10) << setprecision(2) << fixed << right << i.getBasePrice() << "*" << setw(5) << left << "Rate" << setw(9) << right << i.getTaxRate() << "%\n";
+                    cout << setw(15) << left << "" << "*" << setw(5) << "  + $" << right << setprecision(2) << fixed << i.getTaxAmount() << "*" << left << setw(5) << "  = $" << setw(10) << right << i.getTaxedPrice() << "\n";
+                    total += i.getTaxedPrice();
+                }
+                for (GroceryItem i : itemCart_grocery){
+                    cout << setw(15) << left << i.getName() << "*" << setw(5) << "Sub $" << setw(10) << setprecision(2) << fixed << right << i.getBasePrice() << "*" << setw(5) << left << "Rate" << setw(9) << right << 0 << "%\n";
+                    cout << setw(15) << left << "" << "*" << setw(5) << "  + $" << right << setprecision(2) << fixed << 0 << "*" << left << setw(5) << "  = $" << setw(10) << right << i.getBasePrice() << "\n";
+                    total += i.getBasePrice();
+                }
+                for (BookItem i : itemCart_book){
+                    cout << setw(15) << left << i.getName() << "*" << setw(5) << "Sub $" << setw(10) << setprecision(2) << fixed << right << i.getBasePrice() << "*" << setw(5) << left << "Rate" << setw(9) << right << i.getTaxRate() << "%\n";
+                    cout << setw(15) << left << "" << "*" << setw(5) << "  + $" << right << setprecision(2) << fixed << i.getTaxAmount() << "*" << left << setw(5) << "  = $" << setw(10) << right << i.getTaxedPrice() << "\n";
+                    total += i.getTaxedPrice();
+                }
+                cout << setw(15) << left << "" << "*" << setw(15) << "" << "*" << setw(15) << "" << "\n";
+                cout << setw(15) << left << "" << "*" << setw(15) << "" << "*" << setw(15) << "" << "\n";
+                cout << setw(15) << left << "TOTAL" << "*" << setw(5) << "    $" << right << setw(10) <<  setprecision(2) << fixed << total << "*" << setw(15) << "" << "\n";
+                itemCart_untaxable = {};
+                itemCart_taxable = {};
+                itemCart_grocery = {};
+                itemCart_book = {};
+                main();
                 break;
             }
             default: {
