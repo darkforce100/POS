@@ -48,6 +48,6 @@ double TaxableItem::getTaxAmount() const {
  * @virtual
  * @returns string Type of item instance (this)
  * **/
-virtual string TaxableItem::getType() const {
+string TaxableItem::getType() const {
     return "TAXABLE";
 }

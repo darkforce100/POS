@@ -51,6 +51,6 @@ double Item::getBasePrice() const
  * @virtual
  * @returns string Type of item instance (this)
  * **/
-virtual string Item::getType() const {
+string Item::getType() const {
     return "UNTAXABLE";
 }
