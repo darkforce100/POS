@@ -34,15 +34,24 @@ string encodeToString(GroceryItem);
 
 string encodeToString(BookItem);
 
+// Vectors to contain entire catalog
 vector<Item> itemCatalog_untaxable;
 vector<TaxableItem> itemCatalog_taxable;
 vector<GroceryItem> itemCatalog_grocery;
 vector<BookItem> itemCatalog_book;
+
+// Vectors to contain items in cart
 vector<Item> itemCart_untaxable;
 vector<TaxableItem> itemCart_taxable;
 vector<GroceryItem> itemCart_grocery;
 vector<BookItem> itemCart_book;
 
+
+/**
+ * Displays the main menu and generates the clerk logic flow
+ *
+ * @returns int exit status code
+ * **/
 int main() {
     readCatalog();
     int choice = 0;
@@ -248,6 +257,9 @@ int main() {
     return 0;
 }
 
+/**
+ * Generates a log in logic flow as access control to the admin area
+ * **/
 void generateLogInPanel() {
     const string correctPass = "11111";
     string password;
@@ -262,6 +274,9 @@ void generateLogInPanel() {
 
 }
 
+/**
+ * Administrator area functionality
+ * **/
 void generateLoggedAdminPanel() {
     int choice = 0;
     cout << "Welcome, admin.\n\n";
@@ -856,6 +871,9 @@ void generateLoggedAdminPanel() {
     }
 }
 
+/**
+ * Reads the catalog file to the vectors
+ * **/
 void readCatalog() {
     ifstream catFile;
     catFile.open("items.cat");
@@ -870,6 +888,9 @@ void readCatalog() {
     catFile.close();
 }
 
+/**
+ * Writes the vectors to the catalog file
+ * **/
 void writeCatalog() {
     ofstream catFile;
     catFile.open("items.cat");
@@ -888,6 +909,11 @@ void writeCatalog() {
     catFile.close();
 };
 
+/**
+ * Parses an encoded item string to an Item object or relevant child, and adds that item to the appropriate vector
+ *
+ * @param string s String to parse
+ * **/
 void decodeToItem(string s) {
     if (s.find("TAXABLE") == 0) {
         TaxableItem i;
@@ -967,6 +993,12 @@ void decodeToItem(string s) {
     }
 }
 
+/**
+ * Generates a string object containing all informatic fields of the Item argument
+ *
+ * @param Item i Item to return as string
+ * @returns string Encoded string
+ * **/
 string encodeToString(Item i) {
     string s;
     s = "UNTAXABLE|" + i.getName() + "|" + to_string(i.getBasePrice());
@@ -974,12 +1006,24 @@ string encodeToString(Item i) {
     return s;
 }
 
+/**
+ * Generates a string object containing all informatic fields of the TaxableItem argument
+ *
+ * @param TaxableItem i Item to return as string
+ * @returns string Encoded string
+ * **/
 string encodeToString(TaxableItem i) {
     string s;
     s = "TAXABLE|" + i.getName() + "|" + to_string(i.getBasePrice()) + "|" + to_string(i.getTaxRate());
     return s;
 }
 
+/**
+ * Generates a string object containing all informatic fields of the GroceryItem argument
+ *
+ * @param GroceryItem i Item to return as string
+ * @returns string Encoded string
+ * **/
 string encodeToString(GroceryItem i) {
     string s;
     int day, month, year;
@@ -1002,6 +1046,12 @@ string encodeToString(GroceryItem i) {
     return s;
 }
 
+/**
+ * Generates a string object containing all informatic fields of the BookItem argument
+ *
+ * @param BookItem i Item to return as string
+ * @returns string Encoded string
+ * **/
 string encodeToString(BookItem i) {
     string s;
     s = "BOOK|" + i.getName() + "|" + to_string(i.getBasePrice()) + "|" + to_string(i.getTaxRate()) + "|" +

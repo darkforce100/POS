@@ -15,7 +15,7 @@ public:
     double getTaxRate() const;
     double getTaxedPrice() const;
     double getTaxAmount() const;
-    string getType() const;
+    virtual string getType() const;
 };
 
 #endif //POS_TAXABLEITEM_H
